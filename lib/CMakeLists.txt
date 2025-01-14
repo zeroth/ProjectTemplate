@@ -1,5 +1,4 @@
 add_library(mylib
-    src/mylib.cpp
     src/calculator.cpp
 )
 
@@ -9,13 +8,13 @@ add_library(${PROJECT_NAME}::mylib ALIAS mylib)
 include(GenerateExportHeader)
 generate_export_header(mylib
     BASE_NAME MYLIB
-    EXPORT_FILE_NAME include/mylib/mylib_export.hpp
+    EXPORT_FILE_NAME "${CMAKE_CURRENT_BINARY_DIR}/mylib_export.hpp"
 )
 
 target_include_directories(mylib
     PUBLIC
         $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/include>
-        $<BUILD_INTERFACE:${CMAKE_CURRENT_BINARY_DIR}/include>
+        $<BUILD_INTERFACE:${CMAKE_CURRENT_BINARY_DIR}>
         $<INSTALL_INTERFACE:include>
     PRIVATE
         ${CMAKE_CURRENT_SOURCE_DIR}/src
@@ -49,8 +48,8 @@ if(MYPROJECT_ENABLE_INSTALL)
 
     # Install generated headers
     install(
-        DIRECTORY ${CMAKE_CURRENT_BINARY_DIR}/include/
-        DESTINATION include
+        FILES "${CMAKE_CURRENT_BINARY_DIR}/mylib_export.hpp"
+        DESTINATION include/mylib
     )
 
     # Install export targets
